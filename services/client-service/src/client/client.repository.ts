@@ -5,7 +5,7 @@ import { UpdateClientDto } from './dto/update-client.dto';
 export class ClientRepository {
     async create(dto: CreateClientDto) {
         const result = await db.query(
-            `INSERT INTO pc_clients (user_id, company_name, contact_person, phone, address)
+            `INSERT INTO bwpc_clients (user_id, company_name, contact_person, phone, address)
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
             [dto.user_id, dto.company_name, dto.contact_person, dto.phone, dto.address],
         );
@@ -13,17 +13,17 @@ export class ClientRepository {
     }
 
     async findAllClient() {
-        const result = await db.query('SELECT * FROM pc_clients');
+        const result = await db.query('SELECT * FROM bwpc_clients');
         return result.rows;
     }
 
     async findById(id: number) {
-        const result = await db.query(`SELECT * FROM pc_clients WHERE id = $1`, [id]);
+        const result = await db.query(`SELECT * FROM bwpc_clients WHERE id = $1`, [id]);
         return result.rows[0];
     }
 
     async findByUserId(userId: number) {
-        const result = await db.query(`SELECT * FROM pc_clients WHERE user_id = $1`, [userId]);
+        const result = await db.query(`SELECT * FROM bwpc_clients WHERE user_id = $1`, [userId]);
         return result.rows[0];
     }
 
@@ -41,13 +41,13 @@ export class ClientRepository {
         }
 
         values.push(id);
-        const query = `UPDATE pc_clients SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING *`;
+        const query = `UPDATE bwpc_clients SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING *`;
 
         const result = await db.query(query, values);
         return result.rows[0];
     }
 
     async delete(id: number) {
-        await db.query(`DELETE FROM pc_clients WHERE id = $1`, [id]);
+        await db.query(`DELETE FROM bwpc_clients WHERE id = $1`, [id]);
     }
 }

@@ -3,7 +3,7 @@ import { db } from "./database";
 export async function migrate() {
   try {
     await db.query(`
-      CREATE TABLE IF NOT EXISTS pc_tickets (
+      CREATE TABLE IF NOT EXISTS bwpc_tickets (
         id SERIAL PRIMARY KEY,
         client_id INTEGER NOT NULL,
         subject VARCHAR(100) NOT NULL,
@@ -14,7 +14,7 @@ export async function migrate() {
     `);
 
     await db.query(`
-      CREATE TABLE IF NOT EXISTS pc_ticket_messages (
+      CREATE TABLE IF NOT EXISTS bwpc_ticket_messages (
         id SERIAL PRIMARY KEY,
         ticket_id INTEGER NOT NULL,
         sender_role VARCHAR(10) NOT NULL CHECK (sender_role IN ('client', 'admin')),

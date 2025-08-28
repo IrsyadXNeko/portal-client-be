@@ -2,7 +2,7 @@ import { db } from './database';
 
 export async function migrate() {
   await db.query(`
-    CREATE TABLE IF NOT EXISTS pc_clients (
+    CREATE TABLE IF NOT EXISTS bwpc_clients (
       id SERIAL PRIMARY KEY,
       user_id INTEGER NOT NULL,
       company_name VARCHAR(100),
@@ -14,7 +14,7 @@ export async function migrate() {
   `);
 
   await db.query(`
-    CREATE TABLE IF NOT EXISTS pc_biodata_update_requests (
+    CREATE TABLE IF NOT EXISTS bwpc_biodata_update_requests (
       id SERIAL PRIMARY KEY,
       client_id INTEGER NOT NULL,
       new_company_name VARCHAR(100),

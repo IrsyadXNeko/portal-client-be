@@ -5,7 +5,7 @@ import { UpdateInvoiceDto } from "./dto/update-invoice.dto";
 export class InvoiceRepository {
     async create(dto: CreateInvoiceDto) {
         const res = await db.query(
-            'INSERT INTO pc_invoices (client_id, title, description, amount, due_date, is_recurring, recurring_interval) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            'INSERT INTO bwpc_invoices (client_id, title, description, amount, due_date, is_recurring, recurring_interval) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
             [dto.client_id, dto.title, dto.description, dto.amount, dto.due_date, dto.is_recurring, dto.recurring_interval],
         );
         return res.rows[0];
@@ -13,14 +13,14 @@ export class InvoiceRepository {
 
     async findAllInvoice() {
         const res = await db.query(
-            'SELECT * FROM pc_invoices'
+            'SELECT * FROM bwpc_invoices'
         );
         return res.rows;
     }
 
     async findById(id: number) {
         const res = await db.query(
-            'SELECT * FROM pc_invoices WHERE id = $1',
+            'SELECT * FROM bwpc_invoices WHERE id = $1',
             [id],
         );
         return res.rows[0];
@@ -28,7 +28,7 @@ export class InvoiceRepository {
 
     async findByClient(clientId: number) {
         const res = await db.query(
-            'SELECT * FROM pc_invoices WHERE client_id = $1',
+            'SELECT * FROM bwpc_invoices WHERE client_id = $1',
             [clientId],
         )
         return res.rows;
@@ -52,7 +52,7 @@ export class InvoiceRepository {
         values.push(id);
 
         const res = await db.query(
-            `UPDATE pc_invoices SET ${fields.join(', ')}, updated_at = NOW() WHERE id = $${paramIndex} RETURNING *`,
+            `UPDATE bwpc_invoices SET ${fields.join(', ')}, updated_at = NOW() WHERE id = $${paramIndex} RETURNING *`,
             values
         );
 
@@ -60,6 +60,6 @@ export class InvoiceRepository {
     }
 
     async delete(id: number) {
-        await db.query('DELETE FROM pc_invoices WHERE id = $1', [id]);
+        await db.query('DELETE FROM bwpc_invoices WHERE id = $1', [id]);
     }
 }

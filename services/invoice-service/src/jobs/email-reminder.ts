@@ -11,7 +11,7 @@ export async function sendDueDateReminders() {
     const aheadStr = oneDayAhead.toISOString().split('T')[0];
 
     const res = await db.query(
-      `SELECT * FROM pc_invoices WHERE status = 'unpaid' AND (due_date = $1 OR due_date = $2)`,
+      `SELECT * FROM bwpc_invoices WHERE status = 'unpaid' AND (due_date = $1 OR due_date = $2)`,
       [todayStr, aheadStr],
     );
 

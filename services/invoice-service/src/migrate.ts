@@ -3,7 +3,7 @@ import { db } from "./database";
 export async function migrate() {
   try {
     await db.query(`
-      CREATE TABLE IF NOT EXISTS pc_invoices (
+      CREATE TABLE IF NOT EXISTS bwpc_invoices (
         id SERIAL PRIMARY KEY,
         client_id INTEGER NOT NULL,
         title VARCHAR(100) NOT NULL,

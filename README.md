@@ -40,23 +40,34 @@ It allows **Admins** to manage client data, projects, invoices, and tickets, whi
 ### Login
 
 **Request**
-POST /auth/login
+
+`POST /auth/login`
 Content-Type: application/json
 
+```json
 {
-  "email": "client@example.com",
+  "username": "client01",
   "password": "123456"
 }
+```
 
 **Response**
+
+```json
 {
-  "code": 200,
-  "message": "Login success",
-  "data": {
-    "accessToken": "xxxx",
-    "refreshToken": "xxxx"
-  }
+    "code": 200,
+    "message": "Login successful",
+    "data": {
+        "user": {
+            "id": 5,
+            "role": "admin"
+        },
+        "forcePasswordChange": true,
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImNsaWVudF9pZCI6MCwicm9sZSI6ImFkbWluIiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBleGFtcGxlLmNvbSIsImZvcmNlX3Bhc3N3b3JkX2NoYW5nZSI6dHJ1ZSwiaWF0IjoxNzU2NDAzMTc0LCJleHAiOjE3NTY0MDY3NzR9.Cuwbg3OZYKHfMkiBVyWASrRr4dc0mS89-X4uu-e85mQ",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImNsaWVudF9pZCI6MCwicm9sZSI6ImFkbWluIiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBleGFtcGxlLmNvbSIsImZvcmNlX3Bhc3N3b3JkX2NoYW5nZSI6dHJ1ZSwiaWF0IjoxNzU2NDAzMTc0LCJleHAiOjE3NTcwMDc5NzR9.f_fWYQRU-aYJwznj_sWVrp31TekYVagWIIeCewr5FxY"
+    }
 }
+```
 
 ## 📜 License
 MIT License © 2025 IrsyadXNeko

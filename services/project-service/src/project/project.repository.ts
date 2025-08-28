@@ -5,7 +5,7 @@ import { UpdateProjectDto } from "./dto/update-project.dto";
 export class ProjectRepository {
     async create(dto: CreateProjectDto) {
         const res = await db.query(
-            'INSERT INTO pc_projects (client_id, name, description, start_date, end_date) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            'INSERT INTO bwpc_projects (client_id, name, description, start_date, end_date) VALUES ($1, $2, $3, $4, $5) RETURNING *',
             [dto.client_id, dto.name, dto.description, dto.start_date, dto.end_date],
         );
         return res.rows[0];
@@ -13,14 +13,14 @@ export class ProjectRepository {
 
     async findProjects() {
         const res = await db.query(
-            'SELECT * FROM pc_projects',
+            'SELECT * FROM bwpc_projects',
         );
         return res.rows;
     }
 
     async findById(id: number) {
         const res = await db.query(
-            'SELECT * FROM pc_projects WHERE id = $1',
+            'SELECT * FROM bwpc_projects WHERE id = $1',
             [id],
         );
         return res.rows[0];
@@ -28,7 +28,7 @@ export class ProjectRepository {
 
     async findByClientId(clientId: number) {
         const res = await db.query(
-            'SELECT * FROM pc_projects WHERE client_id = $1',
+            'SELECT * FROM bwpc_projects WHERE client_id = $1',
             [clientId],
         );
         return res.rows;
@@ -48,7 +48,7 @@ export class ProjectRepository {
         }
 
         values.push(id);
-        const query = `UPDATE pc_projects SET ${field.join(', ')} WHERE id = $${paramIndex} RETURNING *`;
+        const query = `UPDATE bwpc_projects SET ${field.join(', ')} WHERE id = $${paramIndex} RETURNING *`;
 
         const res = await db.query(query, values);
         return res.rows[0];
@@ -56,7 +56,7 @@ export class ProjectRepository {
 
     async delete(id: number) {
         await db.query(
-            'DELETE FROM pc_projects WHERE id = $1',
+            'DELETE FROM bwpc_projects WHERE id = $1',
             [id],
         );
     }
