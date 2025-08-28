@@ -1,0 +1,195 @@
+services:
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./api-gateway/.env
+    depends_on:
+      - auth-service
+    mem_limit: 1g
+    networks:
+      - backend
+
+  # Auth Service
+  auth-service:
+    build: ./services/auth-service
+    ports:
+      - "3001:3000"
+    env_file:
+      - ./services/auth-service/.env
+    depends_on:
+      - auth-db
+    mem_limit: 1g
+    networks:
+      - backend
+
+  auth-db:
+    image: postgres:16
+    container_name: auth-db
+    restart: always
+    environment:
+      POSTGRES_USER: irsyad
+      POSTGRES_PASSWORD: dummy
+      POSTGRES_DB: db_bwpc_auth
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./docker/postgres/auth:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  # client-service
+  client-service:
+    build: ./services/client-service
+    ports:
+      - "3002:3000"
+    env_file:
+      - ./services/client-service/.env
+    depends_on:
+      - client-db
+      - auth-service
+    mem_limit: 1g
+    networks:
+      - backend
+
+  client-db:
+    image: postgres:16
+    container_name: client-db
+    restart: always
+    environment:
+      POSTGRES_USER: irsyad
+      POSTGRES_PASSWORD: dummy
+      POSTGRES_DB: db_bwpc_client
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./docker/postgres/client:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  # project-service
+  project-service:
+    build: ./services/project-service
+    ports:
+      - "3003:3000"
+    env_file:
+      - ./services/project-service/.env
+    depends_on:
+      - project-db
+      - client-service
+    mem_limit: 1g
+    networks:
+      - backend
+
+  project-db:
+    image: postgres:16
+    container_name: project-db
+    restart: always
+    environment:
+      POSTGRES_USER: irsyad
+      POSTGRES_PASSWORD: dummy
+      POSTGRES_DB: db_bwpc_project
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./docker/postgres/project:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  # invoice-service
+  invoice-service:
+    build: ./services/invoice-service
+    ports:
+      - "3004:3000"
+    env_file:
+      - ./services/invoice-service/.env
+    depends_on:
+      - invoice-db
+      - client-service
+    mem_limit: 1g
+    networks:
+      - backend
+
+  invoice-db:
+    image: postgres:16
+    container_name: invoice-db
+    restart: always
+    environment:
+      POSTGRES_USER: irsyad
+      POSTGRES_PASSWORD: dummy
+      POSTGRES_DB: db_bwpc_invoice
+    ports:
+      - "5436:5432"
+    volumes:
+      - ./docker/postgres/invoices:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  # ticket-service
+  ticket-service:
+    build: ./services/ticket-service
+    ports:
+      - "3005:3000"
+    env_file:
+      - ./services/ticket-service/.env
+    depends_on:
+      - ticket-db
+      - client-service
+    mem_limit: 1g
+    networks:
+      - backend
+
+  ticket-db:
+    image: postgres:16
+    container_name: ticket-db
+    restart: always
+    environment:
+      POSTGRES_USER: irsyad
+      POSTGRES_PASSWORD: dummy
+      POSTGRES_DB: db_bwpc_ticket
+    ports:
+      - "5437:5432"
+    volumes:
+      - ./docker/postgres/tickets:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  # notification-service
+  notification-service:
+    build: ./services/notification-service
+    volumes:
+      - ./docker/postgres/notification:/var/lib/postgresql/data
+    ports:
+      - "3006:3000"
+    env_file:
+      - ./services/notification-service/.env
+    depends_on:
+      - client-service
+      - project-service
+      - ticket-service
+    mem_limit: 1g
+    networks:
+      - backend
+
+  integrity-service:
+    build: ./services/integrity-service
+    ports:
+      - "3007:3000"
+    env_file:
+      - ./services/integrity-service/.env
+    depends_on:
+      - auth-service
+      - client-service
+      - project-service
+      - invoice-service
+      - ticket-service
+      - notification-service
+    mem_limit: 1g
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
