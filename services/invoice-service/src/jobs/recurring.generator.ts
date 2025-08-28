@@ -5,7 +5,7 @@ export async function generateRecurringInvoices() {
         const today = new Date().toISOString().split('T')[0];
 
         const res = await db.query(
-            'SELECT * FROM bwpc_invoices WHERE is_recurring = true AND due_date = $1',
+            'SELECT * FROM pc_invoices WHERE is_recurring = true AND due_date = $1',
             [today],
         );
 
@@ -13,7 +13,7 @@ export async function generateRecurringInvoices() {
             const nextDueDate = getNextDueDate(invoice.due_date, invoice.recurring_interval);
 
             await db.query(
-                `INSERT INTO bwpc_invoices (client_id, title, description, amount, due_date, is_recurring, recurring_interval)
+                `INSERT INTO pc_invoices (client_id, title, description, amount, due_date, is_recurring, recurring_interval)
          VALUES ($1, $2, $3, $4, $5, true, $6)`,
                 [
                     invoice.client_id,

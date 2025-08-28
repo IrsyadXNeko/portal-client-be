@@ -2,7 +2,7 @@ import { db } from './database';
 
 export async function migrate() {
   await db.query(`
-    CREATE TABLE IF NOT EXISTS bwpc_users (
+    CREATE TABLE IF NOT EXISTS pc_users (
       id SERIAL PRIMARY KEY,
       role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'client')),
       username VARCHAR(50) UNIQUE NOT NULL,
@@ -13,5 +13,5 @@ export async function migrate() {
     );
   `);
 
-  console.log('✅ auth-service: bwpc_users table migrated');
+  console.log('✅ auth-service: pc_users table migrated');
 }
